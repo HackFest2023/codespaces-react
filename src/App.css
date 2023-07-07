@@ -29,3 +29,8 @@
 .small {
   font-size: 0.75rem;
 }
+
+.container {
+  max-width: 890px;
+  margin: 40px auto;
+}
