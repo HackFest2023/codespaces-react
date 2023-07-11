@@ -77,6 +77,8 @@ const data = [
 function App() {
   const [validated, setValidated] = useState(false);
   const [searchResult, setSearchResult] = useState(data);
+  const [users, setUsers] = useState([])
+  const endpoint = 'https://jsonplaceholder.typicode.com/users'
  
  
   useEffect(() => {
@@ -85,6 +87,15 @@ function App() {
     searchResult(response.data.data);
     });
   }, []);
+
+  useEffect(() => {
+    (async () => {
+        const data = await fetch(endpoint)
+            .then(res => res.json())
+
+        setUsers(data)
+    })()
+}, []);
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -95,17 +106,19 @@ function App() {
 
     setValidated(true);
   };
-  const tableRows = searchResult.map(
+
+
+  const tableRows = users.map(
     (res) => {
       return (
         <Col sm="12">
           <Card style={{ textAlign: "left", marginBottom: "15px" }}>
            <Card.Body>
-              <Card.Title>{res['ID Nation']} <span>{res.date}</span></Card.Title>
+              <Card.Title>{res['ID Nation']} <span>{res.name}</span></Card.Title>
               <Card.Text>
-             {res.desc}
+             {res.company.catchPhrase}
               </Card.Text>
-              <Button variant="primary">{res.link}</Button>
+              <Button variant="primary">{res.email}</Button>
             </Card.Body>
           </Card>
 
@@ -117,11 +130,13 @@ function App() {
   return (
     <div className="App">
       <Container>
+      <img src="RegCrafterTeamIcons.png" className="App-logo" alt="logo" />
+
         <div className="searchHOlder bg-info-subtle p-3 rounded searchHOlder">
           <Form noValidate validated={validated} onSubmit={handleSubmit}>
             <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-
-              <Col sm="10">
+              
+              <Col sm="10">  
                 <Form.Control size="sm" type="text" placeholder="Search..." />
               </Col>
               <Col sm="2">   <Button variant="primary" type="submit">
